@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="DEBUG">
+    <!--    属性配置-->
+    <Properties>
+        <!--当天文件保存目录,建议不要配置相对路径-->
+        <Property name="log_dir">/index</Property>
+        <!--日志文件名-->
+        <Property name="log_name">index</Property>
+        <!--滚动时间间隔，单位为分钟-->
+        <Property name="Interval">30</Property>
+        <!--滚动文件大小，单位为M-->
+        <Property name="split_size">8MB</Property>
+        <!--        输出日志格式-->
+        <Property name="log_pattern">%d{yyyy-MM-dd HH:mm:ss}=>[%thread]=>%-5level %logger{50} - %msg%n</Property>
+    </Properties>
+    <!--定义附加器-->
+    <Appenders>
+        <!--        控制台输出配置-->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--            只输出level及其以上信息，其它拒绝-->
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${log_pattern}"/>
+        </Console>
+        <!--        输出文件存储配置,默认1小时滚动一次-->
+        <RollingFile name="RollingFile" fileName="${log_dir}/${log_name}.log"
+                     filePattern="${log_dir}/${log_name}-DEBUG-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${log_pattern}"/>
+            <policies>
+                <TimeBasedTriggeringPolicy interval="${Interval}" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="${split_size}"/>
+            </policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

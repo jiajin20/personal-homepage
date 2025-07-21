@@ -1,0 +1,89 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/index?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+
+    # HikariCP连接池配置
+    hikari:
+      minimum-idle: 5               # 最小空闲连接
+      maximum-pool-size: 20         # 最大连接池大小（建议10~50之间）
+      idle-timeout: 600000          # 空闲连接存活最大时间（毫秒）= 10 分钟
+      max-lifetime: 1800000         # 连接最长存活时间（毫秒）= 30 分钟
+      connection-timeout: 30000     # 获取连接的最大等待时间（毫秒）= 30 秒
+      leak-detection-threshold: 20000  # 启用连接泄露检测（20秒没释放则记录日志）
+
+  redis:
+    host: 47.108.188.75
+    port: 6379
+    password: "123456"  # 如果没有密码，可以删除
+    timeout: 2000
+
+  mail:
+    host: smtp.yeah.net
+    port: 465
+    username: fzfnotfound@yeah.net
+    password: HGbxs34ymTXVJMbh
+    from: fzfnotfound@yeah.net
+    protocol: smtp
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+dashscope:
+  api-key: sk-8895ef14f61e489bbf702c316351ed7d
+
+upload:
+  folder: /uploads/
+# MyBatis配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml  # MyBatis的mapper文件位置
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # MyBatis自带的日志实现为控制台输出
+
+# Swagger API文档配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html  # 设置Swagger UI的访问路径
+    tags-sorter: alpha  # 设置API标签的排序方式为字母顺序
+    operations-sorter: alpha  # 设置API操作名称的排序方式为字母顺序
+    version: 1.0  # 设置Swagger UI的版本信息
+  api-docs:
+    path: /v3/api-docs  # 设置API文档的访问路径
+  group-configs:
+    - group: 'BZJ'  # 分组名称
+      paths-to-match: '/**'  # 指定哪些路径下的API需要被包含在这个分组中
+      packages-to-scan: com.bzj.index.controller # 指定需要扫描的包
+
+server:
+  port: 8080  # 监听端口
+#  ssl:
+#    key-store: classpath:fzfnn.xyz.pfx  # SSL证书路径
+#    key-store-password: w3aqqbn3  # SSL证书密码
+#    key-store-type: PKCS12  # 密钥存储类型
+#    enabled: true  # 启用SSL
+
+#  custom:
+#    http-port: 8080  # HTTP端口，用于重定向到HTTPS
+
+# 下面的配置可能需要在Java代码中进行（如之前的HttpsConfig类）
+# 不直接在yml中配置，但你需要确保有一个类似的配置来处理HTTP到HTTPS的重定向
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
